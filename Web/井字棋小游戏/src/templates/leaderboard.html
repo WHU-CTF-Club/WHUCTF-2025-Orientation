@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>吃豆人排行榜</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
+        .container { width: 80%; max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #f0c000; } /* Pac-Man Yellow */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #333; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .rank { width: 50px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 吃豆人最高分排行榜 🏆</h1>
+        <p>（假设这里是您的 Pac-Man 游戏区）</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="rank">排名</th>
+                    <th>玩家</th>
+                    <th>得分</th>
+                    <th>提交时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <td class="rank">{{ loop.index }}</td>
+                    <td>{{ score.player }}</td>
+                    <td><strong>{{ score.score }}</strong></td>
+                    <td>{{ score.date_posted.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">暂无得分记录，快去创造第一个高分吧！</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>井字棋 AI 挑戰</title>
+    <style>
+        /* 頁面整體樣式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        /* 遊戲容器 */
+        #game-container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #1a73e8;
+        }
+
+        /* 棋盤網格 */
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin: 20px auto;
+            width: 315px; /* 100*3 + 5*2 */
+        }
+
+        /* 棋盤格子 */
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cell:hover {
+            background-color: #e8f0fe;
+        }
+
+        /* X 和 O 的顏色 */
+        .cell.x {
+            color: #ea4335;
+        }
+
+        .cell.o {
+            color: #4285f4;
+        }
+
+        /* 遊戲狀態訊息 */
+        #status {
+            font-size: 1.5em;
+            margin-top: 20px;
+            height: 30px;
+        }
+        
+        /* 重新開始按鈕 */
+        #restart-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #1a73e8;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #restart-button:hover {
+            background-color: #185abc;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>井字棋 AI 挑战</h1>
+        <div id="board">
+            </div>
+        <p id="status">你先请！</p>
+        <button id="restart-button">重新开始</button>
+    </div>
+
+    <script>
+const _0x2f277c=_0xf5a2;(function(_0x575f65,_0x1acbf2){const _0x4bf314=_0xf5a2,_0x33a5e4=_0x575f65();while(!![]){try{const _0x4935a5=-parseInt(_0x4bf314(0xa4))/0x1+-parseInt(_0x4bf314(0xb5))/0x2*(parseInt(_0x4bf314(0xa3))/0x3)+-parseInt(_0x4bf314(0xaf))/0x4+-parseInt(_0x4bf314(0xb3))/0x5+parseInt(_0x4bf314(0xcb))/0x6+parseInt(_0x4bf314(0xb2))/0x7*(parseInt(_0x4bf314(0xac))/0x8)+parseInt(_0x4bf314(0xc0))/0x9;if(_0x4935a5===_0x1acbf2)break;else _0x33a5e4['push'](_0x33a5e4['shift']());}catch(_0x4d3521){_0x33a5e4['push'](_0x33a5e4['shift']());}}}(_0xee03,0xb0ffc));const boardElement=document[_0x2f277c(0xc1)](_0x2f277c(0xae)),statusElement=document['getElementById'](_0x2f277c(0xc3)),restartButton=document['getElementById'](_0x2f277c(0xb9)),humanPlayer='X',aiPlayer='O';function _0xee03(){const _0x7efae8=['你先请！','classList','7pvARju','3136445uqjqBC','some','147818hJoUTS','Content-Type','filter','div','restart-button','flag:','textContent','setRequestHeader','fill','length','/fl4gggg_gy56dwdccfs_l','16179381xKFDVH','getElementById','children','status','application/json','dataset','恭喜你贏了！...等一下，这不应该发生！','score','pla','POST','createElement','7892910kBkoey','index','onreadystatechange','39wNQRQS','136070diMCsk','addEventListener','error','stringify','every','readyState','send','innerHTML','1527880GZloMk','平局！','board','3420060CAGavc'];_0xee03=function(){return _0x7efae8;};return _0xee03();}let gameBoard,gameActive=!![];function startGame(){const _0xc54e87=_0x2f277c;gameBoard=Array(0x9)[_0xc54e87(0xbd)](null),gameActive=!![],statusElement[_0xc54e87(0xbb)]=_0xc54e87(0xb0),boardElement[_0xc54e87(0xab)]='';for(let _0x33b9ac=0x0;_0x33b9ac<0x9;_0x33b9ac++){const _0x2b98e8=document[_0xc54e87(0xca)](_0xc54e87(0xb8));_0x2b98e8[_0xc54e87(0xb1)]['add']('cell'),_0x2b98e8[_0xc54e87(0xc5)][_0xc54e87(0xcc)]=_0x33b9ac,_0x2b98e8[_0xc54e87(0xa5)]('click',handleCellClick),boardElement['appendChild'](_0x2b98e8);}}function handleCellClick(_0x54eff7){const _0x4ef309=_0x2f277c,_0x2e6c6a=_0x54eff7['target']['dataset'][_0x4ef309(0xcc)];if(gameBoard[_0x2e6c6a]||!gameActive)return;makeMove(_0x2e6c6a,humanPlayer);if(checkWinner(gameBoard,humanPlayer)){endGame(_0x4ef309(0xc6));const _0x465e3e=new XMLHttpRequest();_0x465e3e['open'](_0x4ef309(0xc9),_0x4ef309(0xbf),!![]),_0x465e3e[_0x4ef309(0xbc)](_0x4ef309(0xb6),_0x4ef309(0xc4)),_0x465e3e[_0x4ef309(0xcd)]=function(){const _0x1fd957=_0x4ef309;if(_0x465e3e[_0x1fd957(0xa9)]===0x4&&_0x465e3e['status']===0xc8)alert(_0x1fd957(0xba)+_0x465e3e['responseText']);else _0x465e3e[_0x1fd957(0xa9)]===0x4&&console[_0x1fd957(0xa6)]('错误:',_0x465e3e['statusText']);},strr=_0x4ef309(0xc8),strr=strr+'yer___';const _0x89a94=JSON[_0x4ef309(0xa7)]({'winner':strr});_0x465e3e[_0x4ef309(0xaa)](_0x89a94);return;}else{if(isBoardFull(gameBoard)){endGame(_0x4ef309(0xad));return;}}gameActive=![],statusElement[_0x4ef309(0xbb)]='AI\x20正在思考...',setTimeout(()=>{const _0x211b29=_0x4ef309,_0x34db12=getBestMove(gameBoard);makeMove(_0x34db12,aiPlayer);if(checkWinner(gameBoard,aiPlayer))endGame('AI\x20获胜！');else isBoardFull(gameBoard)?endGame(_0x211b29(0xad)):(statusElement['textContent']='轮到你了！',gameActive=!![]);},0x1f4);}function makeMove(_0x2a4953,_0x4d6d24){const _0x1797c8=_0x2f277c;gameBoard[_0x2a4953]=_0x4d6d24;const _0x159969=boardElement[_0x1797c8(0xc2)][_0x2a4953];_0x159969['textContent']=_0x4d6d24,_0x159969[_0x1797c8(0xb1)]['add'](_0x4d6d24['toLowerCase']());}function _0xf5a2(_0x133660,_0x555acb){const _0xee0323=_0xee03();return _0xf5a2=function(_0xf5a2ad,_0x2a2b4d){_0xf5a2ad=_0xf5a2ad-0xa3;let _0x398357=_0xee0323[_0xf5a2ad];return _0x398357;},_0xf5a2(_0x133660,_0x555acb);}function checkWinner(_0x16d7bb,_0x53d738){const _0x863b32=_0x2f277c,_0x399774=[[0x0,0x1,0x2],[0x3,0x4,0x5],[0x6,0x7,0x8],[0x0,0x3,0x6],[0x1,0x4,0x7],[0x2,0x5,0x8],[0x0,0x4,0x8],[0x2,0x4,0x6]];return _0x399774[_0x863b32(0xb4)](_0x559d8b=>{const _0x3ef0c6=_0x863b32;return _0x559d8b[_0x3ef0c6(0xa8)](_0x5a8de2=>_0x16d7bb[_0x5a8de2]===_0x53d738);});}function isBoardFull(_0xe2713){const _0x14f013=_0x2f277c;return _0xe2713[_0x14f013(0xa8)](_0xdbee2d=>_0xdbee2d!==null);}function endGame(_0x162c83){const _0x1f92c4=_0x2f277c;statusElement[_0x1f92c4(0xbb)]=_0x162c83,gameActive=![];}restartButton[_0x2f277c(0xa5)]('click',startGame);function getBestMove(_0x11af1f){return minimax(_0x11af1f,aiPlayer)['index'];}function minimax(_0x19aa06,_0x15aea9){const _0x100675=_0x2f277c,_0x48f4ab=_0x19aa06['map']((_0x122cea,_0x143a70)=>_0x122cea===null?_0x143a70:null)[_0x100675(0xb7)](_0x5b29f9=>_0x5b29f9!==null);if(checkWinner(_0x19aa06,humanPlayer))return{'score':-0xa};else{if(checkWinner(_0x19aa06,aiPlayer))return{'score':0xa};else{if(_0x48f4ab['length']===0x0)return{'score':0x0};}}const _0xee554b=[];for(let _0x59515e=0x0;_0x59515e<_0x48f4ab[_0x100675(0xbe)];_0x59515e++){const _0x43fdc6={};_0x43fdc6[_0x100675(0xcc)]=_0x48f4ab[_0x59515e],_0x19aa06[_0x48f4ab[_0x59515e]]=_0x15aea9;if(_0x15aea9===aiPlayer){const _0xb38790=minimax(_0x19aa06,humanPlayer);_0x43fdc6[_0x100675(0xc7)]=_0xb38790[_0x100675(0xc7)];}else{const _0x575b46=minimax(_0x19aa06,aiPlayer);_0x43fdc6[_0x100675(0xc7)]=_0x575b46[_0x100675(0xc7)];}_0x19aa06[_0x48f4ab[_0x59515e]]=null,_0xee554b['push'](_0x43fdc6);}let _0x17adb5;if(_0x15aea9===aiPlayer){let _0x332060=-Infinity;for(let _0x3ea13d=0x0;_0x3ea13d<_0xee554b[_0x100675(0xbe)];_0x3ea13d++){_0xee554b[_0x3ea13d][_0x100675(0xc7)]>_0x332060&&(_0x332060=_0xee554b[_0x3ea13d][_0x100675(0xc7)],_0x17adb5=_0x3ea13d);}}else{let _0x34f0c8=Infinity;for(let _0x58658d=0x0;_0x58658d<_0xee554b[_0x100675(0xbe)];_0x58658d++){_0xee554b[_0x58658d]['score']<_0x34f0c8&&(_0x34f0c8=_0xee554b[_0x58658d][_0x100675(0xc7)],_0x17adb5=_0x58658d);}}return _0xee554b[_0x17adb5];}startGame();
+
+    </script>
+</body>
+</html>
